@@ -11,7 +11,7 @@ log = get_logger(__file__)
     
 class ClassificationServer(ml_server_proto_pb2_grpc.PromptClassificationServiceServicer):
     def __init__(self):
-        self.model = load_classification_model()
+        pass
 
     def ClassifyPrompts(self, request, context):
         return super().ClassifyPrompts(request, context)

@@ -4,6 +4,7 @@ from transformers import Trainer
 
 def trainer(model, training_args, tokenized_data, data_collator, compute_metrics) -> Trainer:
     try:
+        print("Implementing the trainer...")
         trainer = Trainer(
             model=model,
             args=training_args,

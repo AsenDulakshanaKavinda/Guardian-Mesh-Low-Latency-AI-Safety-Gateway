@@ -4,6 +4,14 @@ from transformers import pipeline
 
 
 class TrainingModel:
+    """
+    This class is responsible for setting up the model for training.
+     - It loads the base model and tokenizer from the specified path.
+     - It allows setting specific parameters as trainable while freezing the rest.
+     - It provides methods to get the trainable model and tokenizer for further use in training.
+     - It also includes a method to upload the trained model and tokenizer to the Hugging Face Hub for easy sharing and deployment.
+     - It also handles any exceptions that may occur during model loading and provides informative error messages.
+    """
 
     def __init__(self, model_name: str, model_save_path: str, num_labels: int, id2label: dict, label2id: dict):
         self.model_name = model_name
@@ -52,6 +60,20 @@ class TrainingModel:
         if self.tokenizer is None:
             raise ValueError("Tokenizer not loaded. Please call load_base_model() first.")
         return self.tokenizer
+    
+    
+    def upload_model_hf(self) -> None:
+        try:
+            self.model.save_pretrained(self.model_path)
+            self.tokenizer.save_pretrained(self.model_path)
+            print(f"Model and tokenizer saved locally at {self.model_path}")
+
+            self.model.push_to_hub(self.model_path)
+            self.tokenizer.push_to_hub(self.model_path)
+            print(f"Model and tokenizer uploaded to Hugging Face Hub at {self.model_path}")
+        except Exception as e:
+            print(f"Error uploading model to Hugging Face Hub: {e}")
+            raise RuntimeError(f"Failed to upload model to Hugging Face Hub: {e}")
     
     
 
