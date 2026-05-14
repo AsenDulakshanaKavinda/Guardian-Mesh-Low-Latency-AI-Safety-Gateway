@@ -7,10 +7,12 @@ use serde_json::json;
 
 
 #[derive(Debug)]
-enum AppError {
+pub enum AppError {
     InvalidToken,
     MissingCredentials,
     UserNotFound,
+    UserAlreadyExists,
+    InternalServerError,
     Conflict(String),
     Internal(anyhow::Error),
 }
@@ -21,6 +23,8 @@ impl IntoResponse for AppError {
             Self::InvalidToken => (StatusCode::UNAUTHORIZED, "Invalid or expired token".to_string()),
             Self::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials".to_string()),
             Self::UserNotFound => (StatusCode::NOT_FOUND, "User not found".to_string()),
+            Self::UserAlreadyExists => (StatusCode::NOT_FOUND, "User already exist".to_string()),
+            Self::InternalServerError => (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error".to_string()),
             Self::Conflict(msg) => (StatusCode::CONFLICT, msg),
             Self::Internal(err) => {
                 println!("Internal error: {:?}", err);
