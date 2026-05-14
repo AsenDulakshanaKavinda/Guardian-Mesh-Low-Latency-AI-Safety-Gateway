@@ -1,8 +1,0 @@
-
-logging:
-  log_file: app.log
-  log_dir: logs
-
-host_config:
-  host: http://localhost:3000
-  addr: 0.0.0.0:3000
