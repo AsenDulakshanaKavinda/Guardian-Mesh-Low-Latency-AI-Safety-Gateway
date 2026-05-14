@@ -1,0 +1,50 @@
+{"$message_type":"diagnostic","message":"unused imports: `delete`, `post`, and `put`","code":{"code":"unused_imports","explanation":null},"level":"warning","spans":[{"file_name":"src/routers/mod.rs","byte_start":69,"byte_end":73,"line_start":5,"line_end":5,"column_start":26,"column_end":30,"is_primary":true,"text":[{"text":"use axum::routing::{get, post, put, delete};","highlight_start":26,"highlight_end":30}],"label":null,"suggested_replacement":null,"suggestion_applicability":null,"expansion":null},{"file_name":"src/routers/mod.rs","byte_start":75,"byte_end":78,"line_start":5,"line_end":5,"column_start":32,"column_end":35,"is_primary":true,"text":[{"text":"use axum::routing::{get, post, put, delete};","highlight_start":32,"highlight_end":35}],"label":null,"suggested_replacement":null,"suggestion_applicability":null,"expansion":null},{"file_name":"src/routers/mod.rs","byte_start":80,"byte_end":86,"line_start":5,"line_end":5,"column_start":37,"column_end":43,"is_primary":true,"text":[{"text":"use axum::routing::{get, post, put, delete};","highlight_start":37,"highlight_end":43}],"label":null,"suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[{"message":"`#[warn(unused_imports)]` on by default","code":null,"level":"note","spans":[],"children":[],"rendered":null},{"message":"remove the unused imports","code":null,"level":"help","spans":[{"file_name":"src/routers/mod.rs","byte_start":67,"byte_end":86,"line_start":5,"line_end":5,"column_start":24,"column_end":43,"is_primary":true,"text":[{"text":"use axum::routing::{get, post, put, delete};","highlight_start":24,"highlight_end":43}],"label":null,"suggested_replacement":"","suggestion_applicability":"MachineApplicable","expansion":null},{"file_name":"src/routers/mod.rs","byte_start":63,"byte_end":64,"line_start":5,"line_end":5,"column_start":20,"column_end":21,"is_primary":true,"text":[{"text":"use axum::routing::{get, post, put, delete};","highlight_start":20,"highlight_end":21}],"label":null,"suggested_replacement":"","suggestion_applicability":"MachineApplicable","expansion":null},{"file_name":"src/routers/mod.rs","byte_start":86,"byte_end":87,"line_start":5,"line_end":5,"column_start":43,"column_end":44,"is_primary":true,"text":[{"text":"use axum::routing::{get, post, put, delete};","highlight_start":43,"highlight_end":44}],"label":null,"suggested_replacement":"","suggestion_applicability":"MachineApplicable","expansion":null}],"children":[],"rendered":null}],"rendered":"\u001b[0m\u001b[1m\u001b[33mwarning\u001b[0m\u001b[0m\u001b[1m: unused imports: `delete`, `post`, and `put`\u001b[0m\n\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/routers/mod.rs:5:26\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m5\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0muse axum::routing::{get, post, put, delete};\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                          \u001b[0m\u001b[0m\u001b[1m\u001b[33m^^^^\u001b[0m\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[33m^^^\u001b[0m\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[33m^^^^^^\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mnote\u001b[0m\u001b[0m: `#[warn(unused_imports)]` on by default\u001b[0m\n\n"}
+2026-05-14T07:05:57.748Z INFO  [rustowlc::core] start borrowck of DefId(0:6 ~ gateway[7e67]::server::server)
+2026-05-14T07:05:57.748Z INFO  [rustowlc::core] start borrowck of DefId(0:8 ~ gateway[7e67]::server::server::{closure#0})
+2026-05-14T07:05:57.781Z INFO  [rustowlc::core::analyze] facts of DefId(0:8 ~ gateway[7e67]::server::server::{closure#0}) prepared; start analyze of DefId(0:8 ~ gateway[7e67]::server::server::{closure#0})
+2026-05-14T07:05:57.782Z INFO  [rustowlc::core] borrow checked: 1 / 8
+2026-05-14T07:05:57.782Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.782Z INFO  [rustowlc::core::analyze] facts of DefId(0:6 ~ gateway[7e67]::server::server) prepared; start analyze of DefId(0:6 ~ gateway[7e67]::server::server)
+2026-05-14T07:05:57.783Z INFO  [rustowlc::core] borrow checked: 2 / 8
+2026-05-14T07:05:57.783Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.784Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.784Z INFO  [rustowlc::core] start borrowck of DefId(0:26 ~ gateway[7e67]::handlers::test_handler)
+2026-05-14T07:05:57.784Z INFO  [rustowlc::core] start borrowck of DefId(0:29 ~ gateway[7e67]::handlers::test_handler::{closure#0})
+2026-05-14T07:05:57.787Z INFO  [rustowlc::core::analyze] facts of DefId(0:29 ~ gateway[7e67]::handlers::test_handler::{closure#0}) prepared; start analyze of DefId(0:29 ~ gateway[7e67]::handlers::test_handler::{closure#0})
+2026-05-14T07:05:57.788Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.788Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.789Z INFO  [rustowlc::core] borrow checked: 3 / 8
+2026-05-14T07:05:57.790Z INFO  [rustowlc::core::analyze] facts of DefId(0:26 ~ gateway[7e67]::handlers::test_handler) prepared; start analyze of DefId(0:26 ~ gateway[7e67]::handlers::test_handler)
+2026-05-14T07:05:57.790Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.790Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.791Z INFO  [rustowlc::core] borrow checked: 4 / 8
+2026-05-14T07:05:57.802Z INFO  [rustowlc::core] start borrowck of DefId(0:21 ~ gateway[7e67]::routers::app_routes)
+2026-05-14T07:05:57.807Z INFO  [rustowlc::core::analyze] facts of DefId(0:21 ~ gateway[7e67]::routers::app_routes) prepared; start analyze of DefId(0:21 ~ gateway[7e67]::routers::app_routes)
+2026-05-14T07:05:57.808Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.809Z INFO  [rustowlc::core] borrow checked: 5 / 8
+2026-05-14T07:05:57.810Z INFO  [rustowlc::core] start borrowck of DefId(0:30 ~ gateway[7e67]::main)
+2026-05-14T07:05:57.811Z INFO  [rustowlc::core] start borrowck of DefId(0:31 ~ gateway[7e67]::main::{closure#0})
+2026-05-14T07:05:57.816Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.820Z INFO  [rustowlc::core::analyze] facts of DefId(0:31 ~ gateway[7e67]::main::{closure#0}) prepared; start analyze of DefId(0:31 ~ gateway[7e67]::main::{closure#0})
+2026-05-14T07:05:57.821Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.822Z INFO  [rustowlc::core] borrow checked: 6 / 8
+2026-05-14T07:05:57.825Z INFO  [rustowlc::core::analyze] facts of DefId(0:30 ~ gateway[7e67]::main) prepared; start analyze of DefId(0:30 ~ gateway[7e67]::main)
+2026-05-14T07:05:57.826Z INFO  [rustowlc::core] borrow checked: 7 / 8
+2026-05-14T07:05:57.826Z INFO  [rustowlc::core] start borrowck of DefId(0:33 ~ gateway[7e67]::main#1)
+2026-05-14T07:05:57.826Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.827Z INFO  [rustowlc::core::analyze] facts of DefId(0:33 ~ gateway[7e67]::main#1) prepared; start analyze of DefId(0:33 ~ gateway[7e67]::main#1)
+2026-05-14T07:05:57.827Z INFO  [rustowlc::core] borrow checked: 8 / 8
+2026-05-14T07:05:57.829Z INFO  [rustowlc::core::analyze] start re-computing borrow check with dump: true
+2026-05-14T07:05:57.830Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.837Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/server/mod.rs
+2026-05-14T07:05:57.837Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/handlers/mod.rs
+2026-05-14T07:05:57.837Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/handlers/mod.rs
+2026-05-14T07:05:57.838Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.839Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/routers/mod.rs
+2026-05-14T07:05:57.839Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/main.rs
+2026-05-14T07:05:57.840Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.840Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/main.rs
+2026-05-14T07:05:57.842Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/main.rs
+2026-05-14T07:05:57.857Z INFO  [rustowlc::core::analyze] borrow check finished
+2026-05-14T07:05:57.864Z INFO  [rustowlc::core] analyzed one item of /home/raptor/projects/Guardian-Mesh-Low-Latency-AI-Safety-Gateway/gateway/src/server/mod.rs
+{"$message_type":"diagnostic","message":"1 warning emitted","code":null,"level":"warning","spans":[],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[33mwarning\u001b[0m\u001b[0m\u001b[1m: 1 warning emitted\u001b[0m\n\n"}

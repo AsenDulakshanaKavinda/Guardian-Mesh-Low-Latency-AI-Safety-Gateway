@@ -1,0 +1,1 @@
+for<'a> fn() -> Router {app_routes}: tower_service::Service<IncomingStream<'a, tokio::net::TcpListener>>
