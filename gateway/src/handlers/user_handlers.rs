@@ -1,122 +1,156 @@
-use axum::{Extension, Json, extract::Path, http::StatusCode, routing::delete};
-use sea_orm::{ActiveModelTrait, ActiveValue::Set, ColumnTrait, Condition, DatabaseConnection, EntityTrait, QueryFilter, prelude::Uuid};
 
-use crate::{entities::{self, user}, models::user_models::{CreateUserModel, FetchUserModel, UpdateUserModel}, utils::errors::AppError};
+use axum::{Extension, Json, extract::Path, http::StatusCode};
+use chrono::Utc;
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 
+use uuid::Uuid;
+use validator::Validate;
+
+use crate::{entities::{self, user}, models::{APIResponse, UserResponse, user_models::{CreateUserModel, FetchUserModel, UpdateUserModel}}, utils::{errors::AppError, password::hash_password}};
+
+
+// create user
 pub async fn create_user(
     Extension(db): Extension<DatabaseConnection>,
-    Json(user_data): Json<CreateUserModel>
-) -> Result<StatusCode, AppError>{
-    println!("->> {:<12} - create_user", user_data.email.to_string());
+    Json(user_data): Json<CreateUserModel>,
+) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
 
-    // check if user already exist or not
-    let user = entities::user::Entity::find()
-        .filter(entities::user::Column::Email.eq(user_data.email.clone()))
-        .one(&db)
-        .await
-        .map_err(|_| AppError::UserNotFound)?;
+    // validate request
 
-    match user {
-        Some(_user) => {
-            return Err(AppError::UserAlreadyExists)
-        },
-        None => {
+    // 
+    let existing_user = entities::user::Entity::find()
+    .filter(
+        entities::user::Column::Email.eq(user_data.email.clone())
+    )
+    .one(&db)
+    .await
+    .map_err(|e| AppError::Internal(e.into()))?;
 
-            let new_user = entities::user::ActiveModel {
-                username: Set(user_data.username.to_owned()),
-                email: Set(user_data.email.to_owned()),
-                password: Set(user_data.password.to_owned()),
-                ..Default::default() 
-            };
-
-            new_user.insert(&db)
-                .await
-                .map_err(|_| AppError::InternalServerError)?;
-
-            Ok(StatusCode::CREATED)
-        }
+    if existing_user.is_some() {
+        return Err(AppError::UserAlreadyExists);
     }
+
+    let hashed_password = hash_password(&user_data.password)?;
+
+    let user_id = Uuid::new_v4().to_string();
+
+    let new_user = entities::user::ActiveModel {
+        user_id: Set(user_id),
+        username: Set(user_data.username.clone()),
+        email: Set(user_data.email.clone()),
+        password: Set(hashed_password),
+        created_at: Set(Utc::now().naive_utc()),
+        ..Default::default()
+    };
+
+    let inserted_user = new_user
+        .insert(&db)
+        .await
+        .map_err(|e| AppError::Internal(e.into()))?;
+
+    let response = UserResponse {
+        user_id: inserted_user.user_id,
+        username: inserted_user.username,
+        email: inserted_user.email,
+        created_at: inserted_user.created_at,
+    };
+
+    Ok((
+        StatusCode::CREATED,
+        Json(APIResponse {
+            success: true,
+            message: "User created successfully".to_string(),
+            data: Some(response),
+        }),
+    ))
+
 }
 
+// fetch user
 pub async fn fetch_user(
     Extension(db): Extension<DatabaseConnection>,
-    Json(user_data): Json<FetchUserModel>
-) -> Result<StatusCode, AppError> {
-    println!("->> {:<12} - fetch_user", user_data.email.to_string());
-
-    let user = entities::user::Entity::find()
-        .filter(
-            Condition::all()
-                .add(entities::user::Column::Email.eq(user_data.email))
-                .add(entities::user::Column::Password.eq(user_data.password))
-        )
+    Path(uuid): Path<Uuid>,
+) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
+    let user = entities::user::Entity::find_by_id(uuid)
         .one(&db)
         .await
-        .map_err(|_| AppError::UserNotFound)?;
+        .map_err(|e| AppError::Internal(e.into()))?
+        .ok_or(AppError::UserNotFound)?;
 
-    match user {
-        Some(_user) => {
-            Ok(StatusCode::OK)
-        }
-        None => {
-            return Err(AppError::UserNotFound)
-        }
-    }
+    let response = UserResponse {
+        user_id: user.user_id,
+        username: user.username,
+        email: user.email,
+        created_at: user.created_at,
+    };
 
+    Ok((
+        StatusCode::CREATED,
+        Json(APIResponse {
+            success: true,
+            message: "User fetch successfully".to_string(),
+            data: Some(response),
+        }),
+    ))
 }
+
 
 pub async fn update_user(
     Extension(db): Extension<DatabaseConnection>,
     Path(uuid): Path<Uuid>,
-    Json(user_data): Json<UpdateUserModel>
-) -> Result<StatusCode, AppError> {
-    println!("->> {:<12} - update_user", user_data.username.to_string());
-    let user = entities::user::Entity::find()
-        .filter(entities::user::Column::UserId.eq(uuid))
+    Json(user_data): Json<UpdateUserModel>,
+) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
+
+    // validate request
+
+    let user = entities::user::Entity::find_by_id(uuid)
         .one(&db)
         .await
-        .map_err(|_| AppError::UserNotFound)?;
+        .map_err(|e| AppError::Internal(e.into()))?
+        .ok_or(AppError::UserNotFound)?;
 
-    match user {
-        Some(user) => {
-            let mut user_active: entities::user::ActiveModel = user.into();
-            user_active.username = Set(user_data.username.to_owned());
+    let mut user_active: entities::user::ActiveModel = user.into();
 
-            user_active.update(&db)
-                .await
-                .map_err(|_| AppError::InternalServerError)?;
+    user_active.username = Set(user_data.username);
 
-            Ok(StatusCode::CREATED)
-        }
-        None => {
-            return Err(AppError::UserNotFound)
-        }
-    }
+    let updated_user = user_active
+        .update(&db)
+        .await
+        .map_err(|err| AppError::Internal(err.into()))?;
 
+    let response = UserResponse {
+        user_id: updated_user.user_id,
+        username: updated_user.username,
+        email: updated_user.email,
+        created_at: updated_user.created_at,
+    };
+
+    Ok((
+        StatusCode::CREATED,
+        Json(APIResponse {
+            success: true,
+            message: "User updated successfully".to_string(),
+            data: Some(response),
+        }),
+    ))
 }
 
-pub async fn detele_user(
+
+pub async fn delete_user(
     Extension(db): Extension<DatabaseConnection>,
     Path(uuid): Path<Uuid>,
 ) -> Result<StatusCode, AppError> {
-    println!("->> {:<12} - detele_user", uuid.to_string());
-    let user = entities::user::Entity::find()
-        .filter(entities::user::Column::UserId.eq(uuid))
-        .one(&db)
+
+    let result = entities::user::Entity::delete_by_id(uuid)
+        .exec(&db)
         .await
-        .map_err(|_| AppError::UserNotFound)?;
+        .map_err(|e| AppError::Internal(e.into()))?;
 
-    match user {
-        Some(_user) => {
-            entities::user::Entity::delete_by_id(uuid)
-                .exec(&db)
-                .await
-                .map_err(|_| AppError::InternalServerError)?;
-
-            Ok(StatusCode::ACCEPTED)
-        }
-        None => {
-            return Err(AppError::UserNotFound);
-        }
+    if result.rows_affected == 0 {
+        return Err(AppError::UserNotFound);
     }
+
+    Ok(StatusCode::NO_CONTENT)
 }
+
+

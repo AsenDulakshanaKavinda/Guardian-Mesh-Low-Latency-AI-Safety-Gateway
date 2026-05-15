@@ -22,7 +22,6 @@ pub struct CreateUserModel {
 #[derive(Serialize, Deserialize)]
 pub struct FetchUserModel {
     pub email: String,
-    pub password: String,
 }
 
 #[derive(Serialize, Deserialize)]
