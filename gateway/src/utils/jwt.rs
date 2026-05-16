@@ -11,6 +11,8 @@ use chrono::{Duration, Utc};
 
 use serde::{Serialize, Deserialize};
 
+use crate::utils;
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
@@ -18,10 +20,9 @@ pub struct Claims {
     pub exp: usize,
 }
 
-const JWT_SECRET: &[u8] = b"super_secret_key_change_this";
 
 pub fn create_jwt(user_id: String) -> Result<String, jsonwebtoken::errors::Error> {
-    // let token = (*utils::constants::AUTH_TOKEN).clone();
+    let secret = (*utils::constants::JWT_SECRET).clone();
 
 
     let expiration = Utc::now()
@@ -37,15 +38,17 @@ pub fn create_jwt(user_id: String) -> Result<String, jsonwebtoken::errors::Error
     encode(
         &Header::default(), 
         &claims, 
-        &EncodingKey::from_secret(JWT_SECRET),
+        &EncodingKey::from_secret(secret.as_ref()),
     )
 }
 
 
 pub fn verify_jwt(token: &str) -> Result<Claims, jsonwebtoken::errors::Error> {
+    let secret = (*utils::constants::JWT_SECRET).clone();
+
     let data = decode::<Claims>(
         token,
-        &DecodingKey::from_secret(JWT_SECRET),
+        &DecodingKey::from_secret(secret.as_ref()),
         &Validation::default()
     )?;
 

@@ -28,7 +28,7 @@ pub struct LoginModel {
 }
 
 
-pub async fn login(
+pub async fn login_user(
     Extension(db): Extension<DatabaseConnection>,
     Json(login_data): Json<LoginModel>,
 ) -> Result<Json<AuthResponse>, AppError> {

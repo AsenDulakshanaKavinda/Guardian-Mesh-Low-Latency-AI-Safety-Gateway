@@ -14,6 +14,7 @@ pub enum AppError {
     UserAlreadyExists,
     InternalServerError,
     HashingError,
+    Unauthorized,
     ValidationError,
     InvalidCredentials,
     Conflict(String),
@@ -31,6 +32,7 @@ impl IntoResponse for AppError {
             Self::HashingError => (StatusCode::INTERNAL_SERVER_ERROR, "Error while hashing the password".to_string()),
             Self::ValidationError => (StatusCode::CONFLICT, "Validation failed".to_string()),
             Self::InvalidCredentials => (StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()),
+            Self::Unauthorized => (StatusCode::UNAUTHORIZED, "Unauthorized".to_string()),
             Self::Conflict(msg) => (StatusCode::CONFLICT, msg),
             Self::Internal(err) => {
                 println!("Internal error: {:?}", err);

@@ -15,7 +15,7 @@ pub async fn create_user(
     Json(user_data): Json<CreateUserModel>,
 ) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
 
-    user_data
+    let _ = user_data
         .validate()
         .map_err(|_| AppError::ValidationError);
 

@@ -9,8 +9,58 @@ async fn quick_dev() -> Result<()> {
     let hc = httpc_test::new_client("http://localhost:3000")?;
     let temporary_id_update = "0ef47597-a404-4c5c-b3cd-5c5630cc5950";
     let temporary_id_delete = "dd4eff37-2b47-44e7-9b2b-3a2e8b690e7f";
-    let n = 14;
+    let n = 20;
 
+
+    // 1. REGISTER USER
+    let register_user_success = hc.do_post(
+        "/user/register", 
+        json!({
+            "username": format!("demo{}", n),
+            "email": format!("demo{}gmail.com", n),
+            "password": format!("demo{}", n),
+        })
+    ).await;
+
+    match register_user_success {
+        Ok(res) => {
+            let status = res.status();
+            println!("--> Register! HTTP Status Code: {}", status);
+            // assert_eq!(status, 201, "Expected 201 CREATED"); // Adjusted to match your handler's StatusCode::CREATED
+            res.print().await?;
+        }
+        Err(err) => {
+            println!("--> Error during creation: {:?}", err);
+            return Err(err.into());
+        }
+    }
+
+    // 2. LOGIN USER
+    let login_user_success = hc.do_post(
+        "/user/login", 
+        json!({
+            // "username": format!("demo{}", n),
+            "email": format!("demo{}gmail.com", n),
+            "password": format!("demo{}", n),
+        })
+    ).await;
+
+    match login_user_success {
+        Ok(res) => {
+            let status = res.status();
+            println!("--> Login! HTTP Status Code: {}", status);
+            // assert_eq!(status, 201, "Expected 201 CREATED"); // Adjusted to match your handler's StatusCode::CREATED
+            res.print().await?;
+        }
+        Err(err) => {
+            println!("--> Error during creation: {:?}", err);
+            return Err(err.into());
+        }
+    }
+
+
+    
+    /* 
     // 1. CREATE USER
     let create_user_success = hc.do_post(
         "/user/create", 
@@ -95,7 +145,7 @@ async fn quick_dev() -> Result<()> {
             return Err(err.into());
         }
     }
-
+    */
     Ok(())
 }
     

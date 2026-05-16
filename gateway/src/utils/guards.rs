@@ -1,0 +1,90 @@
+use axum::{
+    body::Body,
+    extract::Request,
+    http::{
+        header::AUTHORIZATION,
+    },
+    middleware::Next,
+    response::Response,
+};
+
+use jsonwebtoken::{
+    decode,
+    DecodingKey,
+    Validation,
+};
+
+use sea_orm::{
+    DatabaseConnection,
+    EntityTrait,
+};
+
+use sea_orm::prelude::Uuid;
+
+use crate::{
+    entities,
+    utils::{
+        jwt::Claims,
+        errors::AppError,
+    },
+};
+
+
+
+#[derive(Clone)]
+pub struct CurrentUser(pub entities::user::Model);
+
+
+const JWT_SECRET: &[u8] = b"super_secret_key_change_this";
+
+
+pub async fn guard(
+    mut req: Request<Body>,
+    next: Next,
+) -> Result<Response, AppError> {
+
+
+    let auth_header = req
+        .headers()
+        .get(AUTHORIZATION)
+        .and_then(|header| header.to_str().ok())
+        .ok_or(AppError::Unauthorized)?;
+
+
+    let token = auth_header
+        .strip_prefix("Bearer ")
+        .ok_or(AppError::Unauthorized)?;
+
+    let token_data = decode::<Claims>(
+        token,
+        &DecodingKey::from_secret(JWT_SECRET),
+        &Validation::default(),
+    )
+    .map_err(|_| AppError::Unauthorized)?;
+
+
+    let user_id = Uuid::parse_str(&token_data.claims.sub)
+        .map_err(|_| AppError::Unauthorized)?;
+
+
+
+    let db = req
+        .extensions()
+        .get::<DatabaseConnection>()
+        .ok_or(AppError::InternalServerError)?
+        .clone();
+
+
+    let user = entities::user::Entity::find_by_id(user_id)
+        .one(&db)
+        .await
+        .map_err(|e| AppError::Internal(e.into()))?
+        .ok_or(AppError::Unauthorized)?;
+
+
+
+    req.extensions_mut()
+        .insert(CurrentUser(user));
+
+    Ok(next.run(req).await)
+}
