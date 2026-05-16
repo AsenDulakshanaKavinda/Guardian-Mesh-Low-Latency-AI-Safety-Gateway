@@ -15,9 +15,11 @@ pub async fn create_user(
     Json(user_data): Json<CreateUserModel>,
 ) -> Result<(StatusCode, Json<APIResponse<UserResponse>>), AppError> {
 
-    // validate request
+    user_data
+        .validate()
+        .map_err(|_| AppError::ValidationError);
 
-    // 
+
     let existing_user = entities::user::Entity::find()
     .filter(
         entities::user::Column::Email.eq(user_data.email.clone())

@@ -1,4 +1,5 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use validator::Validate;
 
 pub mod user_models;
 
@@ -16,3 +17,5 @@ pub struct UserResponse {
     pub email: String,
     pub created_at: chrono::NaiveDateTime,
 }
+
+

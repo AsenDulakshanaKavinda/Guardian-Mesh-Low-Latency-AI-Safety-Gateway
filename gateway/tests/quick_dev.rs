@@ -8,7 +8,7 @@ use serde_json::json;
 async fn quick_dev() -> Result<()> {
     let hc = httpc_test::new_client("http://localhost:3000")?;
     let temporary_id_update = "0ef47597-a404-4c5c-b3cd-5c5630cc5950";
-    let temporary_id_delete = "a33156e9-4e4f-46eb-bc66-629f23264ec5";
+    let temporary_id_delete = "dd4eff37-2b47-44e7-9b2b-3a2e8b690e7f";
     let n = 14;
 
     // 1. CREATE USER
@@ -39,7 +39,7 @@ async fn quick_dev() -> Result<()> {
     let fetch_user_success = hc.do_post(
         "/user/fetch",
         json!({
-            "email": "demo6gmail.com"
+            "email": "demo7gmail.com"
         })
     ).await;
 
