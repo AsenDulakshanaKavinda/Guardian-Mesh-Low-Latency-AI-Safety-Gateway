@@ -15,6 +15,7 @@ pub enum AppError {
     InternalServerError,
     HashingError,
     ValidationError,
+    InvalidCredentials,
     Conflict(String),
     Internal(anyhow::Error),
 }
@@ -29,6 +30,7 @@ impl IntoResponse for AppError {
             Self::InternalServerError => (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error".to_string()),
             Self::HashingError => (StatusCode::INTERNAL_SERVER_ERROR, "Error while hashing the password".to_string()),
             Self::ValidationError => (StatusCode::CONFLICT, "Validation failed".to_string()),
+            Self::InvalidCredentials => (StatusCode::UNAUTHORIZED, "Invalid credentials".to_string()),
             Self::Conflict(msg) => (StatusCode::CONFLICT, msg),
             Self::Internal(err) => {
                 println!("Internal error: {:?}", err);

@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
-use validator::Validate;
+
 
 pub mod user_models;
+pub mod auth_models;
 
 #[derive(Debug, Serialize)]
 pub struct APIResponse<T> {
