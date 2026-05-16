@@ -30,7 +30,7 @@ async fn quick_dev() -> Result<()> {
             res.print().await?;
         }
         Err(err) => {
-            println!("--> Error during creation: {:?}", err);
+            println!("--> Error during register: {:?}", err);
             return Err(err.into());
         }
     }
@@ -53,14 +53,37 @@ async fn quick_dev() -> Result<()> {
             res.print().await?;
         }
         Err(err) => {
-            println!("--> Error during creation: {:?}", err);
+            println!("--> Error during login: {:?}", err);
+            return Err(err.into());
+        }
+    }
+
+
+
+    let create_prompt_success = hc.do_post(
+        "/prompt/create", 
+        json!({
+            "prompt": "this is a bad prompt".to_string(),
+            "prompt_type": "bady type".to_string(),
+        })
+    ).await;
+
+    match create_prompt_success {
+        Ok(res) => {
+            let status = res.status();
+            println!("--> Prompt insert! HTTP Status Code: {}", status);
+            // assert_eq!(status, 201, "Expected 201 CREATED"); // Adjusted to match your handler's StatusCode::CREATED
+            res.print().await?;
+        }
+        Err(err) => {
+            println!("--> Error during prompt insert: {:?}", err);
             return Err(err.into());
         }
     }
 
 
     
-    /* 
+    /*
     // 1. CREATE USER
     let create_user_success = hc.do_post(
         "/user/create", 
@@ -145,7 +168,7 @@ async fn quick_dev() -> Result<()> {
             return Err(err.into());
         }
     }
-    */
+     */
     Ok(())
 }
     

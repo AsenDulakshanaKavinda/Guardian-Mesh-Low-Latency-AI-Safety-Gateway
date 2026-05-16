@@ -7,9 +7,10 @@ use tower_http::cors::{Any, CorsLayer};
 
 mod auth_route;
 mod user_route;
+mod prompt_router;
 use crate::routes::auth_route::auth_routes;
-//vuse crate::routes::auth_route::auth_routes;
-use crate::routes::user_route::user_routes;
+use crate::routes::prompt_router::prompt_routes;
+// use crate::routes::user_route::user_routes;
 use crate::utils;
 use crate::utils::guards::guard;
 
@@ -25,7 +26,8 @@ pub async fn main_route() -> Router {
         .allow_origin(Any);
 
     let main_route = Router::new()
-        .merge(user_routes())
+        // .merge(user_routes())
+        .merge(prompt_routes())
         .route_layer(middleware::from_fn(guard))
         .merge(auth_routes())
         .layer(Extension(db))

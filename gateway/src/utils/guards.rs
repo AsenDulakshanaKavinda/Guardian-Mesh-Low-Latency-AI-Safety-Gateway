@@ -24,8 +24,7 @@ use sea_orm::prelude::Uuid;
 use crate::{
     entities,
     utils::{
-        jwt::Claims,
-        errors::AppError,
+        self, errors::AppError, jwt::Claims
     },
 };
 
@@ -42,7 +41,7 @@ pub async fn guard(
     mut req: Request<Body>,
     next: Next,
 ) -> Result<Response, AppError> {
-
+    let secret = (*utils::constants::JWT_SECRET).clone();
 
     let auth_header = req
         .headers()
@@ -57,7 +56,7 @@ pub async fn guard(
 
     let token_data = decode::<Claims>(
         token,
-        &DecodingKey::from_secret(JWT_SECRET),
+        &DecodingKey::from_secret(secret.as_ref()),
         &Validation::default(),
     )
     .map_err(|_| AppError::Unauthorized)?;
