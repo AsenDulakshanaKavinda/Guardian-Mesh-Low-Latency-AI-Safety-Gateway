@@ -22,11 +22,12 @@ dotenv = "0.15.0"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 anyhow = "1"
-serde = "1.0.228"
+serde = { version = "1.0.228", features = ["derive"] }
 chrono = "0.4.44"
 uuid = { version = "1.23.1", features = ["v4"] }
 argon2 = "0.5.3"
 validator = { version = "0.20.0", features = ["derive"] }
+jsonwebtoken = { version = "10.4.0", features = ["aws_lc_rs"] }
 
 
 [dev-dependencies]
