@@ -26,6 +26,8 @@ pub enum AppError {
     // Internal Errors
     InternalServerError,
     Internal(anyhow::Error),
+
+    // grpc clinet errors
 }
 
 impl IntoResponse for AppError {
