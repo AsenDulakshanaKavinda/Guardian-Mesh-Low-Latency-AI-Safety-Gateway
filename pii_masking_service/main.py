@@ -1,5 +1,7 @@
+from server.ner_server import serve
+
 def main():
-    print("Hello from pii-masking-service!")
+    serve()
 
 
 if __name__ == "__main__":
