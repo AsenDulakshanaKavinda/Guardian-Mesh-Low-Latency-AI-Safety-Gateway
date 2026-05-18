@@ -17,7 +17,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     tonic_build::configure()
         .out_dir("src/generated")
         .compile_protos(
-            &["proto/ner_proto.proto"],
+            &["proto/ner_proto.proto", "proto/threat_proto.proto"],
             &["proto"],
         )?;
 

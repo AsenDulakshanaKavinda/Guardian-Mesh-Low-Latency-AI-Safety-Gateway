@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package threat_proto;
+
+service ThreatClassificationService {
+    rpc ClassifyThreat (ThreatClassifyRequest) returns (ThreatClassifyResponse);
+}
+
+message ThreatClassifyRequest {
+  string prompt_str = 1;
+}
+
+
+message ThreatClassifyResponse {
+  string label = 1;
+  string category = 2;
+  string severity = 3;
+}
