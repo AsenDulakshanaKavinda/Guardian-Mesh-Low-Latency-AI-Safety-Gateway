@@ -1,4 +1,4 @@
-
+//! This build script is responsible for compiling the Protocol Buffers (protobuf) definitions  
 
 /* 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -6,6 +6,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 */
+
+
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=proto/ner_proto.proto");
