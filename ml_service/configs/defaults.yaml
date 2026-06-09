@@ -1,4 +1,0 @@
-defaults:
-  - _self_
-  - environments: dev
-  - logging: app
