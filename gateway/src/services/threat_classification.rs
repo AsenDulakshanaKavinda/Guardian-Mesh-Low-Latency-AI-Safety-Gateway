@@ -17,7 +17,7 @@ use crate::{
     utils::errors::AppError,
 };
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)] 
 pub struct ThreatClassificationRequest {
     prompt_str: String,
 }
