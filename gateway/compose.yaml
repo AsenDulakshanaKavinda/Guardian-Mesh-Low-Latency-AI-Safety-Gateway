@@ -7,13 +7,13 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
-services:
-  server:
-    build:
-      context: .
-      target: final
-    ports:
-      - 3000:3000
+# services:
+#  server:
+    # build:
+      # context: .
+      # target: final
+    # ports:
+      # - 3000:3000
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
@@ -48,3 +48,62 @@ services:
 #   db-password:
 #     file: db/password.txt
 
+
+
+services:
+  # 1. The Database Engine
+  db:
+    image: postgres:17.10
+    container_name: guardian_mesh_postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: Guardian-Mesh
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  # 2. The Management UI (Dashboard)
+  pgadmin:
+    image: dpage/pgadmin4:snapshot 
+    container_name: guardian_mesh_pgadmin_ui
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # 3. Chroma Vector Database
+  chroma_node:
+    image: chromadb/chroma:0.5.3
+    container_name: guardian_mesh_chroma_db
+    restart: unless-stopped
+    ports:
+      - "9001:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSISTENT_DIR=/chroma/data
+    volumes:
+      - chroma_storage:/chroma/data
+    networks:
+      - app_network
+
+# Shared Persistence and Networking
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  chroma_storage:
+    driver: local
