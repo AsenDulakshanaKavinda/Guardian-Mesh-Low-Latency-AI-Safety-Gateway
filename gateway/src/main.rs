@@ -5,6 +5,8 @@ mod server;
 mod routers;
 mod handlers;
 mod security;
+mod schemas;
+mod entities;
 
 
 #[tokio::main]
