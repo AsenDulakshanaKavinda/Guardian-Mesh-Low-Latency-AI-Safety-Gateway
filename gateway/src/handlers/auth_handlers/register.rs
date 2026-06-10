@@ -28,7 +28,7 @@ pub struct RegisterModel {
     pub password: String,
 }
 
-// todo: Chnage the error type after dev
+
 pub async fn register_handler(
     Extension(db): Extension<DatabaseConnection>,
     Json(user_data): Json<RegisterModel>,
@@ -59,10 +59,10 @@ pub async fn register_handler(
     // todo: Chnage the error type after dev
     user.insert(&db)
         .await
-        .map_err(|err| AppError::Internal(err.into()))?;
+        .map_err(|_| AppError::InternalServerError)?;
 
     // todo: Chnage the error type after dev
-    let token = create_jwt(user_id.to_string()).map_err(|err| AppError::Internal(err.into()))?;
+    let token = create_jwt(user_id.to_string()).map_err(|_| AppError::InternalServerError)?;
 
     Ok((StatusCode::CREATED, Json(AuthResponse { token })))
 }

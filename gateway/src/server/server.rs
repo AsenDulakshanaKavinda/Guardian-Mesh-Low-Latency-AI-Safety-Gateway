@@ -1,11 +1,6 @@
 use std::net::SocketAddr;
 
-
-
-use crate::routers::{main_route, test_route::test_route};
-
-
-
+use crate::routers::main_route;
 
 pub async fn setup_server() {
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

@@ -8,7 +8,6 @@ use tower_http::cors::{Any, CorsLayer};
 use crate::utils;
 
 pub mod auth_route;
-pub mod test_route;
 
 pub async fn main_route() -> Router {
     let conn_str = (*utils::constants::DATABASE_URL).clone();
