@@ -3,8 +3,28 @@ name = "gateway"
 version = "0.1.0"
 edition = "2024"
 
+[workspace]
+members = [".", "migration"]
+
 [dependencies]
-axum = "0.8.9"
-serde_json = "1.0.149"
+
+migration = { path = "migration" }
+
+
+
+axum = { version = "0.8.9", features = ["macros"] }
+serde_json = "1.0.150"
 tokio = { version = "1", features = ["full"] }
 tower-http = { version = "0.6.10", features = ["cors"] }
+tracing = "0.1.44"
+anyhow = "1.0"
+sea-orm = { version = "2.0.0-rc.38", features = ["sqlx-postgres", "runtime-tokio-rustls"] }
+argon2 = "0.5.3"
+chrono = "0.4.45"
+rand_core = { version = "0.6", features = ["getrandom"] }
+dotenv = "0.15.0"
+lazy_static = "1.5.0"
+jsonwebtoken = { version = "10.4.0", features = ["aws_lc_rs"] }
+validator = { version = "0.20.0", features = ["derive"] } 
+serde = { version = "1.0.228", features = ["derive"] }
+uuid = { version = "1.23.3", features = ["v4"] }

@@ -1,22 +1,32 @@
-
-
-use axum::Router;
+use crate::routers::auth_route::authentication_route;
+use crate::utils::guards::guard;
 use axum::http::Method;
-use axum::routing::{get, post, put, delete};
+use axum::{Extension, Router, middleware};
+use sea_orm::{Database, DatabaseConnection};
 use tower_http::cors::{Any, CorsLayer};
 
+use crate::utils;
 
-use crate::handlers::test_handler;
+pub mod auth_route;
 
+pub async fn main_route() -> Router {
+    let conn_str = (*utils::constants::DATABASE_URL).clone();
 
-pub fn app_routes() -> Router {
+    let db: DatabaseConnection = Database::connect(conn_str)
+        .await
+        .expect("Error while connecting to database.");
+
     let cors = CorsLayer::new()
         .allow_methods([Method::GET, Method::POST, Method::PUT, Method::DELETE])
         .allow_origin(Any);
 
-    Router::new()
-        .route("/", get(test_handler))
-        .layer(cors)
+    let main_route = Router::new()
+        // other protected route
+        .layer(middleware::from_fn(guard))
+        // auth route
+        .merge(authentication_route())
+        .layer(Extension(db))
+        .layer(cors);
 
+    main_route
 }
-
