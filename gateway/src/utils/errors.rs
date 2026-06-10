@@ -11,7 +11,7 @@ pub enum AppError {
     MissingCredentials,
     InvalidCredentials,
     Unauthorized,
-    Forbidden, // Added: Authenticated, but lacks permissions
+    Forbidden, // Authenticated, but lacks permissions
 
     // User-related Errors
     UserNotFound,
@@ -71,7 +71,7 @@ impl IntoResponse for AppError {
                 msg
             ),
             Self::ValidationError(msg) => (
-                StatusCode::UNPROCESSABLE_ENTITY, // Corrected from CONFLICT to 422
+                StatusCode::UNPROCESSABLE_ENTITY, 
                 format!("Validation failed: {}", msg),
             ),
             Self::NotFound(msg) => (
